@@ -1,0 +1,6 @@
+{
+  "name": "HYD Shop",
+  "description": "Vibrant TikTok-optimized T-Shirt store featuring the latest premium streetwear and oversized tees with Cash on Delivery across Pakistan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
