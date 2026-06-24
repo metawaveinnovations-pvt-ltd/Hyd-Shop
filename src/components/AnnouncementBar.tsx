@@ -1,9 +1,19 @@
+import { useState, useEffect } from 'react';
 import { Sparkles, Truck, ShieldCheck, Flame } from 'lucide-react';
 
 export function AnnouncementBar() {
+  const [marqueeText, setMarqueeText] = useState('🔥 MID-SUMMER SLASH SALE: FLAT 50% OFF FOR A LIMITED TIME! • FREE COD NATIONWIDE');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('hyd_marquee');
+    if (saved) {
+      setMarqueeText(saved);
+    }
+  }, []);
+
   const announcements = [
     { text: "🇵🇰 FREE SHIPPING ALL OVER PAKISTAN!", icon: <Truck size={12} className="text-yellow-400" /> },
-    { text: "🔥 MID-SUMMER SLASH SALE: FLAT 50% OFF FOR A LIMITED TIME!", icon: <Flame size={12} className="text-[#f80759] animate-pulse" /> },
+    { text: marqueeText, icon: <Flame size={12} className="text-[#f80759] animate-pulse" /> },
     { text: "📦 CASH ON DELIVERY (COD) AVAILABLE NATIONWIDE", icon: <ShieldCheck size={12} className="text-[#00c6ff]" /> },
     { text: "⚡ BUY 2 GET 10% EXTRA DISCOUNT AUTOMATICALLY!", icon: <Sparkles size={12} className="text-yellow-400" /> }
   ];

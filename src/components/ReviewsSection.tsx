@@ -1,9 +1,31 @@
+import { useState, useEffect } from 'react';
 import { Star, CheckCircle2, ShieldCheck, Heart, ArrowRight } from 'lucide-react';
 import { Review } from '../types';
 import { REVIEWS } from '../data';
 import { Logo } from './Header';
 
 export function ReviewsSection() {
+  const [helpline, setHelpline] = useState('03000000000');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('hyd_helpline');
+    if (saved) {
+      setHelpline(saved);
+    }
+  }, []);
+
+  const getWhatsAppNumber = () => {
+    const digitsOnly = helpline.replace(/\D/g, '');
+    if (digitsOnly.startsWith('0')) {
+      return '92' + digitsOnly.slice(1);
+    }
+    if (digitsOnly.startsWith('92')) {
+      return digitsOnly;
+    }
+    return digitsOnly || '923000000000';
+  };
+
+  const waNumber = getWhatsAppNumber();
   return (
     <section id="reviews-section" className="w-full bg-zinc-950 border-t border-zinc-900 py-16 px-4">
       <div className="max-w-6xl mx-auto space-y-12">
@@ -170,7 +192,7 @@ export function ReviewsSection() {
                   Type a response...
                 </div>
                 <a 
-                  href="https://wa.me/923000000000?text=Salam%2C%20I%20have%20a%20question%20about%20your%20T-shirts" 
+                  href={`https://wa.me/${waNumber}?text=Salam%2C%20I%20have%20a%20question%20about%20your%20T-shirts`} 
                   target="_blank"
                   rel="noreferrer"
                   className="ml-2 bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-full cursor-pointer transition-colors"

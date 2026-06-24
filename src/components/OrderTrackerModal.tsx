@@ -13,6 +13,27 @@ export function OrderTrackerModal({ isOpen, onClose }: OrderTrackerModalProps) {
   const [searchKey, setSearchKey] = useState('');
   const [foundOrders, setFoundOrders] = useState<Order[]>([]);
   const [searched, setSearched] = useState(false);
+  const [helpline, setHelpline] = useState('03000000000');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('hyd_helpline');
+    if (saved) {
+      setHelpline(saved);
+    }
+  }, []);
+
+  const getWhatsAppNumber = () => {
+    const digitsOnly = helpline.replace(/\D/g, '');
+    if (digitsOnly.startsWith('0')) {
+      return '92' + digitsOnly.slice(1);
+    }
+    if (digitsOnly.startsWith('92')) {
+      return digitsOnly;
+    }
+    return digitsOnly || '923000000000';
+  };
+
+  const waNumber = getWhatsAppNumber();
 
   // Search orders in localStorage
   const handleSearch = (e: React.FormEvent) => {
@@ -163,7 +184,7 @@ export function OrderTrackerModal({ isOpen, onClose }: OrderTrackerModalProps) {
 
                         {/* WhatsApp Speed-up Button */}
                         <a
-                          href={`https://wa.me/923000000000?text=Salam%2C%20please%20speed%20up%20my%20order%20status%20${order.id}`}
+                          href={`https://wa.me/${waNumber}?text=Salam%2C%20please%20speed%20up%20my%20order%20status%20${order.id}`}
                           target="_blank"
                           rel="noreferrer"
                           className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 py-2 px-4 rounded-xl text-xs font-bold text-center block transition-all"

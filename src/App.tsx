@@ -43,6 +43,19 @@ export default function App() {
   // Order Success State
   const [placedOrder, setPlacedOrder] = useState<Order | null>(null);
 
+  // Dynamic helpline fetch & format
+  const getWhatsAppNumber = () => {
+    const saved = localStorage.getItem('hyd_helpline') || '03000000000';
+    const digitsOnly = saved.replace(/\D/g, '');
+    if (digitsOnly.startsWith('0')) {
+      return '92' + digitsOnly.slice(1);
+    }
+    if (digitsOnly.startsWith('92')) {
+      return digitsOnly;
+    }
+    return digitsOnly || '923000000000';
+  };
+
   // References for scrolling
   const catalogRef = useRef<HTMLDivElement>(null);
   const checkoutRef = useRef<HTMLDivElement>(null);
@@ -315,7 +328,7 @@ export default function App() {
               <div className="space-y-3">
                 <a
                   id="whatsapp-success-confirm"
-                  href={`https://wa.me/923000000000?text=Salam%20HYD%20Shop!%20I%20just%20placed%20order%20${placedOrder.id}%20for%20a%20T-shirt.%20Please%20confirm%20my%20shipment!`}
+                  href={`https://wa.me/${getWhatsAppNumber()}?text=Salam%20HYD%20Shop!%20I%20just%20placed%20order%20${placedOrder.id}%20for%20a%20T-shirt.%20Please%20confirm%20my%20shipment!`}
                   target="_blank"
                   rel="noreferrer"
                   className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 px-5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer"

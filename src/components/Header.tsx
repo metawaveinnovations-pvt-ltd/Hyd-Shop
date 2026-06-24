@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ShoppingCart, MessageCircle, Phone, Clock, Search, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -121,6 +121,28 @@ interface HeaderProps {
 export function Header({ cartCount, onCartClick, onTrackOrderClick }: HeaderProps) {
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [helpline, setHelpline] = useState('03000000000');
+
+  useEffect(() => {
+    const saved = localStorage.getItem('hyd_helpline');
+    if (saved) {
+      setHelpline(saved);
+    }
+  }, []);
+
+  // Format Pakistani numbers for WhatsApp APIs correctly (e.g. 03214567890 -> 923214567890)
+  const formatWhatsAppNumber = (num: string) => {
+    const digitsOnly = num.replace(/\D/g, '');
+    if (digitsOnly.startsWith('0')) {
+      return '92' + digitsOnly.slice(1);
+    }
+    if (digitsOnly.startsWith('92')) {
+      return digitsOnly;
+    }
+    return digitsOnly || '923000000000';
+  };
+
+  const waNumber = formatWhatsAppNumber(helpline);
 
   return (
     <>
@@ -162,7 +184,7 @@ export function Header({ cartCount, onCartClick, onTrackOrderClick }: HeaderProp
             {/* Helpline / WhatsApp Quick Action (Super crucial in PK) */}
             <a
               id="whatsapp-header-link"
-              href="https://wa.me/923000000000?text=Hi%20HYD%20Shop%2C%20I%20want%20to%20know%20more%20about%20your%20oversized%20T-shirts."
+              href={`https://wa.me/${waNumber}?text=Hi%20HYD%20Shop%2C%20I%20want%20to%20know%20more%20about%20your%20oversized%20T-shirts.`}
               target="_blank"
               rel="noreferrer"
               className="hidden sm:flex items-center space-x-1.5 text-xs text-zinc-300 hover:text-emerald-400 font-medium bg-emerald-950/20 hover:bg-emerald-950/40 border border-emerald-900/50 px-3 py-1.5 rounded-full transition-all duration-200"
@@ -174,7 +196,7 @@ export function Header({ cartCount, onCartClick, onTrackOrderClick }: HeaderProp
             {/* Direct Phone Call Support */}
             <a
               id="call-header-link"
-              href="tel:03000000000"
+              href={`tel:${helpline}`}
               className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-900 rounded-full transition-colors hidden lg:block"
               title="Call Helpline"
             >
@@ -201,7 +223,7 @@ export function Header({ cartCount, onCartClick, onTrackOrderClick }: HeaderProp
       {/* Floating WhatsApp Bubble for mobile & absolute ease of ordering */}
       <a
         id="floating-whatsapp-bubble"
-        href="https://wa.me/923000000000?text=Hi%20HYD%20Shop%2C%20I%20want%20to%20place%20an%20order%20for%20a%20T-shirt!"
+        href={`https://wa.me/${waNumber}?text=Hi%20HYD%20Shop%2C%20I%20want%20to%20place%20an%20order%20for%20a%20T-shirt!`}
         target="_blank"
         rel="noreferrer"
         className="fixed bottom-6 right-6 z-50 bg-emerald-500 hover:bg-emerald-600 text-white p-4 rounded-full shadow-[0_8px_30px_rgb(16,185,129,0.3)] hover:scale-110 transition-transform flex items-center justify-center border-2 border-white/20 cursor-pointer"
